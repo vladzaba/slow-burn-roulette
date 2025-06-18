@@ -182,5 +182,3 @@ document.querySelectorAll('input, select').forEach(el => el.addEventListener('ch
 // Init
 balanceEl.textContent = balance;
 initBoard();
-
-//
