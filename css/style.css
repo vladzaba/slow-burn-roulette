@@ -10,6 +10,8 @@ body {
   font-family: 'Roboto', sans-serif;
   display: flex;
   justify-content: center;
+  align-items: center;      /* add this line */
+  min-height: 100vh;        /* add this line */
   padding: 20px;
 }
 .casino {
