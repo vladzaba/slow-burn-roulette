@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Slow-Burn Roulette</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="casino" role="application">
+    <header><h1>Slow-Burn Roulette</h1></header>
+
+    <div class="stats" aria-live="polite">
+      <div>💰 Balance: <span class="value" id="balance">1000</span>¢</div>
+      <div class="odds">📊 Odds: <span class="value" id="odds">–</span></div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="color">Color</button>
+      <button role="tab" aria-selected="false" data-tab="number">Number</button>
+      <button role="tab" aria-selected="false" data-tab="side">Side Bets</button>
+    </div>
+
+    <div class="tab-panel" id="color" role="tabpanel" aria-hidden="false">
+      <div class="options" role="radiogroup" aria-label="Color bet">
+        <label><input type="radio" name="colorBet" value="red" checked><span>Red</span></label>
+        <label><input type="radio" name="colorBet" value="black"><span>Black</span></label>
+        <label><input type="radio" name="colorBet" value="green"><span>Green</span></label>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="number" role="tabpanel" aria-hidden="true">
+      <div class="number-grid" role="radiogroup" aria-label="Number bet">
+        <!-- Number grid will be inserted dynamically by JS -->
+      </div>
+    </div>
+
+    <div class="tab-panel" id="side" role="tabpanel" aria-hidden="true">
+      <div class="options" role="radiogroup" aria-label="Side bet">
+        <label><input type="radio" name="sideBet" value="odd" checked><span>Odd</span></label>
+        <label><input type="radio" name="sideBet" value="even"><span>Even</span></label>
+        <label><input type="radio" name="sideBet" value="low"><span>1–18</span></label>
+        <label><input type="radio" name="sideBet" value="high"><span>19–36</span></label>
+        <label><input type="radio" name="sideBet" value="doz1"><span>1–12</span></label>
+        <label><input type="radio" name="sideBet" value="doz2"><span>13–24</span></label>
+        <label><input type="radio" name="sideBet" value="doz3"><span>25–36</span></label>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div>
+        <label for="stake">Stake</label>
+        <input type="number" id="stake" min="100" step="100" value="100" aria-label="Stake (¢)" />
+      </div>
+      <div>
+        <label for="speed">Speed</label>
+        <select id="speed" aria-label="Speed">
+          <option value="1000">Slow</option>
+          <option value="500" selected>Medium</option>
+          <option value="200">Fast</option>
+        </select>
+      </div>
+      <button class="spin-btn" id="spin">Spin</button>
+    </div>
+
+    <div class="board-container">
+      <div class="board-header"><div class="fill" id="progress"></div></div>
+      <div id="board" role="grid" aria-label="Roulette board"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="content">
+      <h2 id="resTitle">Result</h2>
+      <p id="resDetail"></p>
+      <button id="playAgain">Play Again</button>
+    </div>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
