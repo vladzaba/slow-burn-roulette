@@ -16,57 +16,105 @@
       <div class="odds">📊 Odds: <span class="value" id="odds">–</span></div>
     </div>
 
-    <div class="tabs" role="tablist">
-      <button role="tab" aria-selected="true" data-tab="color">Color</button>
-      <button role="tab" aria-selected="false" data-tab="number">Number</button>
-      <button role="tab" aria-selected="false" data-tab="side">Side Bets</button>
-    </div>
-
-    <div class="tab-panel" id="color" role="tabpanel" aria-hidden="false">
-      <div class="options" role="radiogroup" aria-label="Color bet">
-        <label><input type="radio" name="colorBet" value="red" checked><span>Red</span></label>
-        <label><input type="radio" name="colorBet" value="black"><span>Black</span></label>
-        <label><input type="radio" name="colorBet" value="green"><span>Green</span></label>
+    <div class="betting-area">
+      <div class="stake-controls">
+        <div class="stake-input">
+          <label for="stake">Stake (¢)</label>
+          <input type="number" id="stake" min="100" step="100" value="100" aria-label="Stake (¢)" />
+        </div>
+        <div class="speed-input">
+          <label for="speed">Speed</label>
+          <select id="speed" aria-label="Speed">
+            <option value="1000">Slow</option>
+            <option value="500" selected>Medium</option>
+            <option value="200">Fast</option>
+          </select>
+        </div>
+        <button class="spin-btn" id="spin">BET</button>
+      </div>
+      
+      <div class="board-container">
+        <div class="board-header"><div class="fill" id="progress"></div></div>
+        <div id="board" role="grid" aria-label="Roulette board"></div>
+      </div>
+      
+      <div class="bets-section">
+        <div class="bets-row">
+          <label class="color-bet red"><input type="radio" name="colorBet" value="red"><span>Red</span></label>
+          <label class="color-bet black"><input type="radio" name="colorBet" value="black"><span>Black</span></label>
+          <label class="color-bet green"><input type="radio" name="colorBet" value="green"><span>Green</span></label>
+        </div>
+        
+        <div class="bets-row">
+          <label><input type="radio" name="sideBet" value="doz1"><span>1-12</span></label>
+          <label><input type="radio" name="sideBet" value="doz2"><span>13-24</span></label>
+          <label><input type="radio" name="sideBet" value="doz3"><span>25-36</span></label>
+        </div>
+        <div class="bets-row">
+          <label><input type="radio" name="sideBet" value="low"><span>1-18</span></label>
+          <label><input type="radio" name="sideBet" value="even"><span>Even</span></label>
+          <label><input type="radio" name="sideBet" value="odd"><span>Odd</span></label>
+          <label><input type="radio" name="sideBet" value="high"><span>19-36</span></label>
+        </div>
       </div>
     </div>
 
-    <div class="tab-panel" id="number" role="tabpanel" aria-hidden="true">
+    <div class="number-grid-container">
       <div class="number-grid" role="radiogroup" aria-label="Number bet">
-        <!-- Number grid will be inserted dynamically by JS -->
+        <!-- Numbers 1-36 in 3 rows -->
+        <div class="number-row">
+          <!-- 1-12 -->
+          <label><input type="radio" name="numberBet" value="1"><span class="red">1</span></label>
+          <label><input type="radio" name="numberBet" value="2"><span class="black">2</span></label>
+          <label><input type="radio" name="numberBet" value="3"><span class="red">3</span></label>
+          <label><input type="radio" name="numberBet" value="4"><span class="black">4</span></label>
+          <label><input type="radio" name="numberBet" value="5"><span class="red">5</span></label>
+          <label><input type="radio" name="numberBet" value="6"><span class="black">6</span></label>
+          <label><input type="radio" name="numberBet" value="7"><span class="red">7</span></label>
+          <label><input type="radio" name="numberBet" value="8"><span class="black">8</span></label>
+          <label><input type="radio" name="numberBet" value="9"><span class="red">9</span></label>
+          <label><input type="radio" name="numberBet" value="10"><span class="black">10</span></label>
+          <label><input type="radio" name="numberBet" value="11"><span class="black">11</span></label>
+          <label><input type="radio" name="numberBet" value="12"><span class="red">12</span></label>
+        </div>
+        
+        <div class="number-row">
+          <!-- 13-24 -->
+          <label><input type="radio" name="numberBet" value="13"><span class="black">13</span></label>
+          <label><input type="radio" name="numberBet" value="14"><span class="red">14</span></label>
+          <label><input type="radio" name="numberBet" value="15"><span class="black">15</span></label>
+          <label><input type="radio" name="numberBet" value="16"><span class="red">16</span></label>
+          <label><input type="radio" name="numberBet" value="17"><span class="black">17</span></label>
+          <label><input type="radio" name="numberBet" value="18"><span class="red">18</span></label>
+          <label><input type="radio" name="numberBet" value="19"><span class="red">19</span></label>
+          <label><input type="radio" name="numberBet" value="20"><span class="black">20</span></label>
+          <label><input type="radio" name="numberBet" value="21"><span class="red">21</span></label>
+          <label><input type="radio" name="numberBet" value="22"><span class="black">22</span></label>
+          <label><input type="radio" name="numberBet" value="23"><span class="red">23</span></label>
+          <label><input type="radio" name="numberBet" value="24"><span class="black">24</span></label>
+        </div>
+        
+        <div class="number-row">
+          <!-- 25-36 -->
+          <label><input type="radio" name="numberBet" value="25"><span class="red">25</span></label>
+          <label><input type="radio" name="numberBet" value="26"><span class="black">26</span></label>
+          <label><input type="radio" name="numberBet" value="27"><span class="red">27</span></label>
+          <label><input type="radio" name="numberBet" value="28"><span class="black">28</span></label>
+          <label><input type="radio" name="numberBet" value="29"><span class="black">29</span></label>
+          <label><input type="radio" name="numberBet" value="30"><span class="red">30</span></label>
+          <label><input type="radio" name="numberBet" value="31"><span class="black">31</span></label>
+          <label><input type="radio" name="numberBet" value="32"><span class="red">32</span></label>
+          <label><input type="radio" name="numberBet" value="33"><span class="black">33</span></label>
+          <label><input type="radio" name="numberBet" value="34"><span class="red">34</span></label>
+          <label><input type="radio" name="numberBet" value="35"><span class="black">35</span></label>
+          <label><input type="radio" name="numberBet" value="36"><span class="red">36</span></label>
+        </div>
+        
+        <!-- Zero at the bottom center -->
+        <div class="number-row center">
+          <label><input type="radio" name="numberBet" value="0"><span class="green">0</span></label>
+        </div>
       </div>
-    </div>
-
-    <div class="tab-panel" id="side" role="tabpanel" aria-hidden="true">
-      <div class="options" role="radiogroup" aria-label="Side bet">
-        <label><input type="radio" name="sideBet" value="odd" checked><span>Odd</span></label>
-        <label><input type="radio" name="sideBet" value="even"><span>Even</span></label>
-        <label><input type="radio" name="sideBet" value="low"><span>1–18</span></label>
-        <label><input type="radio" name="sideBet" value="high"><span>19–36</span></label>
-        <label><input type="radio" name="sideBet" value="doz1"><span>1–12</span></label>
-        <label><input type="radio" name="sideBet" value="doz2"><span>13–24</span></label>
-        <label><input type="radio" name="sideBet" value="doz3"><span>25–36</span></label>
-      </div>
-    </div>
-
-    <div class="actions">
-      <div>
-        <label for="stake">Stake</label>
-        <input type="number" id="stake" min="100" step="100" value="100" aria-label="Stake (¢)" />
-      </div>
-      <div>
-        <label for="speed">Speed</label>
-        <select id="speed" aria-label="Speed">
-          <option value="1000">Slow</option>
-          <option value="500" selected>Medium</option>
-          <option value="200">Fast</option>
-        </select>
-      </div>
-      <button class="spin-btn" id="spin">Spin</button>
-    </div>
-
-    <div class="board-container">
-      <div class="board-header"><div class="fill" id="progress"></div></div>
-      <div id="board" role="grid" aria-label="Roulette board"></div>
     </div>
   </div>
 
