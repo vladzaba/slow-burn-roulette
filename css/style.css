@@ -23,27 +23,12 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
 
-/* HEADER */
-header {
-  background: rgb(30, 44, 55);
-  padding: 16px;
-  text-align: center;
-  border-bottom: 3px solid rgb(91, 156, 75);
-}
-header h1 {
-  color: #d4af37;
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
 /* STATS BAR */
 .stats {
   display: flex;
   justify-content: space-between;
   background: rgb(30, 44, 55);
   padding: 12px 24px;
-  border-bottom: 1px solid rgb(52, 68, 82);
 }
 .stats div {
   display: flex;
@@ -52,7 +37,7 @@ header h1 {
 }
 .stats .value {
   font-weight: 700;
-  color: #d4af37;
+  color: #fff;
 }
 .stats .odds .value {
   font-size: 1.3rem;
@@ -91,12 +76,12 @@ header h1 {
   color: #fff;
   font-size: 1rem;
   font-weight: 500;
-  width: 100%;
+  width: 100;
 }
 .spin-btn {
-  background: linear-gradient(to bottom, #d4af37, #b8860b);
+  background: rgb(53, 121, 246);
   border: none;
-  color: #0a2e0a;
+  color: white;
   padding: 12px 24px;
   font-size: 1.1rem;
   font-weight: 700;
@@ -107,14 +92,15 @@ header h1 {
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+.spin-btn:hover:not(:disabled) {
+  background: rgb(40, 100, 220);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0,0,0,0.4);
+}
 .spin-btn:disabled {
   background: #555;
   cursor: not-allowed;
   opacity: 0.7;
-}
-.spin-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0,0,0,0.4);
 }
 
 /* BOARD & PROGRESS */
@@ -133,7 +119,7 @@ header h1 {
 .board-header .fill {
   height: 100%;
   width: 0;
-  background: #d4af37;
+  background: rgb(53, 121, 246);
   transition: width 0.2s linear;
 }
 #board {
@@ -173,13 +159,13 @@ header h1 {
   box-shadow: none;
 }
 .slot.winner {
-  box-shadow: 0 0 12px 6px #d4af37;
+  box-shadow: 0 0 12px 6px rgb(53, 121, 246);
   animation: pulse 1s infinite alternate;
   transform: scale(1.1);
 }
 @keyframes pulse {
   to {
-    box-shadow: 0 0 16px 8px #ffd700;
+    box-shadow: 0 0 16px 8px rgb(40, 100, 220);
   }
 }
 
@@ -214,10 +200,10 @@ header h1 {
   font-weight: 500;
 }
 .bets-section input:checked + span {
-  background: linear-gradient(to bottom, #d4af37, #b8860b);
-  color: #0a2e0a;
+  background: rgb(53, 121, 246);
+  color: white;
   font-weight: 700;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 10px rgba(53, 121, 246, 0.5);
 }
 
 /* Color bet specific styling */
@@ -271,10 +257,10 @@ header h1 {
   font-size: 1.1rem;
 }
 .number-grid input:checked + span {
-  background: linear-gradient(to bottom, #d4af37, #b8860b);
-  color: #0a2e0a;
+  background: rgb(53, 121, 246);
+  color: white;
   font-weight: 700;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 10px rgba(53, 121, 246, 0.5);
 }
 
 /* Number colors */
@@ -325,14 +311,14 @@ header h1 {
 .modal h2 {
   font-size: 1.8rem;
   margin-bottom: 16px;
-  color: #d4af37;
+  color: #fff;
 }
 .modal p {
   margin-bottom: 24px;
   font-size: 1.2rem;
 }
 .modal button {
-  background: linear-gradient(to bottom, #d4af37, #b8860b);
+  background: rgb(53, 121, 246);
   border: none;
   padding: 12px 30px;
   border-radius: 8px;
@@ -340,12 +326,13 @@ header h1 {
   cursor: pointer;
   transition: all 0.2s;
   font-size: 1.1rem;
-  color: #0a2e0a;
+  color: white;
   text-transform: uppercase;
   letter-spacing: 1px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 .modal button:hover {
+  background: rgb(40, 100, 220);
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0,0,0,0.4);
 }
