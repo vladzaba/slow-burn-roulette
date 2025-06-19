@@ -1,17 +1,19 @@
 # 🎲 Slow-Burn Roulette
 
+![Slow-Burn Roulette Demo](./slow_burn_roulette.gif)
+
 A unique roulette variant built for players who want slower, more suspenseful gameplay.
 
 Instead of instant spin results, numbers are eliminated one-by-one allowing players to watch their odds evolve in real time.
 
 ## 💡 Key Features
 
-- Elimination-style roulette: same odds, better suspense
-- Full support for:
-  - Color bets (red, black, green)
-  - Number bets (0–36)
-  - Side bets (odd/even, dozens, high/low)
-- Real-time odds tracking
+- Elimination-style roulette: same odds, better suspense  
+- Full support for:  
+  - Color bets (red, black, green)  
+  - Number bets (0–36)  
+  - Side bets (odd/even, dozens, high/low)  
+- Real-time odds tracking  
 - 3 speed settings (slow, medium, fast)
 
 ## 🎯 Why it’s different
