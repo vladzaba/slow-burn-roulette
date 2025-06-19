@@ -5,7 +5,11 @@ const wheel = Array.from({ length: 37 }, (_, n) => ({
   color: n === 0 ? 'green' : reds.has(n) ? 'red' : 'black'
 }));
 let remaining, order, balance = 1000;
-let currentHoverBet = null;
+
+// Define the rows for the number elimination window layout
+const row1 = [3,6,9,12,15,18,21,24,27,30,33,36];
+const row2 = [2,5,8,11,14,17,20,23,26,29,32,35];
+const row3 = [1,4,7,10,13,16,19,22,25,28,31,34];
 
 // DOM references
 const balanceEl = document.getElementById('balance');
@@ -46,21 +50,62 @@ function setControlsEnabled(enabled) {
   } else {
     spinBtn.classList.remove('disabled');
   }
+  
+  // Add pointer-events control for hover prevention
+  const elements = document.querySelectorAll(
+    '.color-bet, .side-bet, .number-grid label'
+  );
+  elements.forEach(el => {
+    if (!enabled) {
+      el.classList.add('no-hover');
+    } else {
+      el.classList.remove('no-hover');
+    }
+  });
 }
 
-// Initialize board with numbers 0-36 in order
+// Initialize board with numbers in the specified layout
 function initBoard() {
   board.innerHTML = '';
   remaining = wheel.map(w => ({ ...w, removed: false }));
   
-  for (let num = 0; num <= 36; num++) {
+  // Create 0 slot
+  const slot0 = document.createElement('div');
+  slot0.className = `slot green zero`;
+  slot0.textContent = 0;
+  slot0.dataset.idx = 0;
+  slot0.setAttribute('role', 'gridcell');
+  board.append(slot0);
+  
+  // Create row1 slots
+  row1.forEach(num => {
     const slot = document.createElement('div');
     slot.className = `slot ${wheel[num].color}`;
     slot.textContent = num;
     slot.dataset.idx = num;
-    slot.setAttribute('role','gridcell');
+    slot.setAttribute('role', 'gridcell');
     board.append(slot);
-  }
+  });
+  
+  // Create row2 slots
+  row2.forEach(num => {
+    const slot = document.createElement('div');
+    slot.className = `slot ${wheel[num].color}`;
+    slot.textContent = num;
+    slot.dataset.idx = num;
+    slot.setAttribute('role', 'gridcell');
+    board.append(slot);
+  });
+  
+  // Create row3 slots
+  row3.forEach(num => {
+    const slot = document.createElement('div');
+    slot.className = `slot ${wheel[num].color}`;
+    slot.textContent = num;
+    slot.dataset.idx = num;
+    slot.setAttribute('role', 'gridcell');
+    board.append(slot);
+  });
   
   progress.style.width = '0%';
   updateOdds();
@@ -170,8 +215,21 @@ function applyBrightColors(numbers) {
   });
 }
 
+// Clear hover effects
+function clearHover() {
+  document.querySelectorAll('.color-bet, .side-bet, .number-grid label').forEach(el => {
+    el.classList.remove('hover');
+  });
+  
+  document.querySelectorAll('.slot').forEach(slot => {
+    slot.classList.remove('bright-red', 'bright-black', 'bright-green');
+  });
+}
+
 // Handle bet hover
 function handleBetHover(event, type, value) {
+  if (spinBtn.disabled) return; // Skip if game is processing
+  
   clearHover();
   event.currentTarget.classList.add('hover');
   
@@ -205,17 +263,6 @@ function handleBetHover(event, type, value) {
   }
 }
 
-// Clear hover effects
-function clearHover() {
-  document.querySelectorAll('.color-bet, .side-bet').forEach(el => {
-    el.classList.remove('hover');
-  });
-  
-  document.querySelectorAll('.slot').forEach(slot => {
-    slot.classList.remove('bright-red', 'bright-black', 'bright-green');
-  });
-}
-
 // Spin the wheel
 function spin() {
   const stake = +stakeIn.value;
@@ -242,6 +289,8 @@ function spin() {
       choice: +numberBet.value, 
       stake 
     };
+    // Add persistent selected class
+    numberBet.parentElement.classList.add('selected');
   } 
   else if (colorBet) {
     betContext = { 
@@ -303,6 +352,10 @@ againBtn.addEventListener('click', () => {
   document.querySelectorAll('.bets-section span').forEach(span => {
     span.style.outline = '';
   });
+  // Clear selected classes
+  document.querySelectorAll('.number-grid label').forEach(label => {
+    label.classList.remove('selected');
+  });
 });
 
 document.querySelectorAll('input[name="numberBet"]').forEach(input => {
@@ -311,6 +364,11 @@ document.querySelectorAll('input[name="numberBet"]').forEach(input => {
       deselectOtherBets('numberBet');
       updateOdds();
       applyBrightColors([parseInt(input.value)]);
+      // Clear other selections and add selected class
+      document.querySelectorAll('.number-grid label').forEach(label => {
+        label.classList.remove('selected');
+      });
+      input.parentElement.classList.add('selected');
     }
   });
 });
@@ -329,6 +387,10 @@ document.querySelectorAll('input[name="colorBet"]').forEach(input => {
         numbers = [0];
       }
       applyBrightColors(numbers);
+      // Clear number selections
+      document.querySelectorAll('.number-grid label').forEach(label => {
+        label.classList.remove('selected');
+      });
     }
   });
 });
@@ -353,6 +415,10 @@ document.querySelectorAll('input[name="sideBet"]').forEach(input => {
           break;
       }
       applyBrightColors(numbers);
+      // Clear number selections
+      document.querySelectorAll('.number-grid label').forEach(label => {
+        label.classList.remove('selected');
+      });
     }
   });
 });
@@ -367,6 +433,18 @@ document.querySelectorAll('.side-bet').forEach(bet => {
   const input = bet.querySelector('input');
   bet.addEventListener('mouseenter', (e) => handleBetHover(e, 'side', input.value));
   bet.addEventListener('mouseleave', clearHover);
+});
+
+// Add hover to number grid
+document.querySelectorAll('.number-grid label').forEach(label => {
+  const input = label.querySelector('input');
+  label.addEventListener('mouseenter', (e) => {
+    if (spinBtn.disabled) return;
+    clearHover();
+    label.classList.add('hover');
+    applyBrightColors([parseInt(input.value)]);
+  });
+  label.addEventListener('mouseleave', clearHover);
 });
 
 stakeIn.addEventListener('change', updateOdds);

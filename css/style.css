@@ -57,18 +57,21 @@ body {
   gap: 16px;
   flex-wrap: wrap;
 }
-.stake-input, .speed-input {
+.stake-input,
+.speed-input {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 120px;
 }
-.stake-input label, .speed-input label {
+.stake-input label,
+.speed-input label {
   font-size: 0.9rem;
   margin-bottom: 4px;
   color: #c5c5c5;
 }
-.stake-input input, .speed-input select {
+.stake-input input,
+.speed-input select {
   background: rgb(30, 44, 55);
   border: 1px solid rgb(52, 68, 82);
   padding: 10px 12px;
@@ -76,7 +79,7 @@ body {
   color: #fff;
   font-size: 1rem;
   font-weight: 500;
-  width: 100;
+  width: 100%;
 }
 .spin-btn {
   background: rgb(53, 121, 246);
@@ -88,14 +91,14 @@ body {
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 .spin-btn:hover:not(:disabled) {
   background: rgb(40, 100, 220);
   transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
 }
 .spin-btn:disabled {
   background: #555;
@@ -110,7 +113,7 @@ body {
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 16px;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 .board-header {
   height: 6px;
@@ -122,26 +125,31 @@ body {
   background: rgb(53, 121, 246);
   transition: width 0.2s linear;
 }
+
+/* UPDATED BOARD LAYOUT */
 #board {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-rows: repeat(3, 60px);
+  grid-template-columns: 1fr repeat(12, 1fr);
   gap: 6px;
   padding: 12px;
-  justify-content: center;
 }
 .slot {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  transition: all 0.3s;
   font-size: 0.9rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 1;
+}
+.slot.zero {
+  grid-row: 1 / 4;
+  grid-column: 1;
 }
 .slot.red {
   background: rgb(233, 62, 78);
@@ -209,11 +217,9 @@ body {
   box-shadow: 0 0 10px rgba(53, 121, 246, 0.5);
   outline: none;
 }
-
-/* Color bet specific styling */
 .color-bet span {
   color: white;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   outline: 2px solid rgb(55, 68, 81);
 }
 .color-bet.red span {
@@ -225,13 +231,11 @@ body {
 .color-bet.green span {
   background: rgb(91, 156, 75);
 }
-
-/* Side bet styling */
 .side-bet span {
   outline: 2px solid rgb(55, 68, 81);
 }
 
-/* NUMBER GRID - SQUARE STYLE */
+/* NUMBER GRID */
 .number-grid-container {
   padding: 0 16px 16px;
 }
@@ -244,9 +248,6 @@ body {
   display: flex;
   justify-content: center;
   gap: 6px;
-}
-.number-row.center {
-  justify-content: center;
 }
 .number-grid label {
   display: block;
@@ -262,7 +263,7 @@ body {
   background: rgb(30, 44, 55);
   transition: all 0.2s;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
   font-size: 1.1rem;
 }
@@ -272,8 +273,6 @@ body {
   font-weight: 700;
   box-shadow: 0 0 10px rgba(53, 121, 246, 0.5);
 }
-
-/* Number colors */
 .number-grid .red {
   background: rgb(233, 62, 78);
   color: white;
@@ -313,7 +312,7 @@ body {
   width: 90%;
   transform: scale(0.8);
   transition: transform 0.3s;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
 .modal.active .content {
   transform: scale(1);
@@ -339,62 +338,58 @@ body {
   color: white;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 .modal button:hover {
   background: rgb(40, 100, 220);
   transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
 }
 
 /* INACTIVE STATE STYLES */
 .spin-btn.disabled {
-  background: rgb(43, 93, 174) !important; /* Inactive Blue */
+  background: rgb(43, 93, 174) !important;
 }
-
 .color-bet.red.disabled span {
-  background: rgb(187, 39, 54) !important; /* Inactive Red */
+  background: rgb(187, 39, 54) !important;
+  opacity: 0.7;
 }
-
 .color-bet.black.disabled span {
-  background: rgb(39, 54, 65) !important; /* Inactive Black */
+  background: rgb(39, 54, 65) !important;
+  opacity: 0.7;
 }
-
 .color-bet.green.disabled span {
-  background: rgb(72, 125, 61) !important; /* Inactive Green */
+  background: rgb(72, 125, 61) !important;
+  opacity: 0.7;
 }
-
 .side-bet.disabled span {
-  background: rgb(38, 54, 66) !important; /* Original background */
+  background: rgb(38, 54, 66) !important;
   opacity: 0.7;
   outline: none !important;
 }
-
 .number-grid input:disabled + span {
   opacity: 0.7;
 }
-
 .number-grid input:disabled + span.red {
-  background: rgb(187, 39, 54) !important; /* Inactive Red */
+  background: rgb(187, 39, 54) !important;
+  opacity: 0.7;
 }
-
 .number-grid input:disabled + span.black {
-  background: rgb(39, 54, 65) !important; /* Inactive Black */
+  background: rgb(39, 54, 65) !important;
+  opacity: 0.7;
 }
-
 .number-grid input:disabled + span.green {
-  background: rgb(72, 125, 61) !important; /* Inactive Green */
+  background: rgb(72, 125, 61) !important;
+  opacity: 0.7;
 }
 
 /* BRIGHT COLOR EFFECTS */
 .slot.bright-red {
   background: rgb(236, 119, 136) !important;
 }
-
 .slot.bright-black {
   background: rgb(83, 109, 130) !important;
 }
-
 .slot.bright-green {
   background: rgb(127, 192, 113) !important;
 }
@@ -403,21 +398,37 @@ body {
 .color-bet:hover:not(.disabled) span {
   /* Only color change, no elevation */
 }
-
 .color-bet.red.hover:not(.disabled) span {
   background: rgb(236, 119, 136) !important;
 }
-
 .color-bet.black.hover:not(.disabled) span {
   background: rgb(83, 109, 130) !important;
 }
-
 .color-bet.green.hover:not(.disabled) span {
   background: rgb(127, 192, 113) !important;
 }
-
 .side-bet.hover:not(.disabled) span {
   background: rgb(60, 80, 100) !important;
+}
+
+/* NEW FIXES */
+/* Prevent hover during game processing */
+.color-bet.disabled, 
+.side-bet.disabled, 
+.number-grid label.disabled {
+  pointer-events: none;
+}
+
+/* Selected number style */
+.number-grid label.selected span {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(53, 121, 246, 0.8);
+  z-index: 2;
+}
+
+/* Disable hover during processing */
+.no-hover {
+  pointer-events: none !important;
 }
 
 /* RESPONSIVE DESIGN */
@@ -427,9 +438,10 @@ body {
     font-size: 0.9rem;
   }
   .slot {
-    width: 36px;
-    height: 36px;
     font-size: 0.8rem;
+  }
+  #board {
+    grid-template-rows: repeat(3, 50px);
   }
   .number-grid span {
     width: 45px;
@@ -437,7 +449,6 @@ body {
     font-size: 0.9rem;
   }
 }
-
 @media (max-width: 480px) {
   .stats {
     flex-direction: column;
@@ -453,6 +464,10 @@ body {
   .spin-btn {
     min-width: 100%;
     margin-top: 10px;
+  }
+  #board {
+    grid-template-rows: repeat(3, 40px);
+    gap: 4px;
   }
   .number-grid span {
     width: 35px;
