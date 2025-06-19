@@ -5,6 +5,7 @@ const wheel = Array.from({ length: 37 }, (_, n) => ({
   color: n === 0 ? 'green' : reds.has(n) ? 'red' : 'black'
 }));
 let remaining, order, balance = 1000;
+let currentHoverBet = null;
 
 // DOM references
 const balanceEl = document.getElementById('balance');
@@ -21,12 +22,30 @@ const againBtn = document.getElementById('playAgain');
 
 // Set controls enabled/disabled
 function setControlsEnabled(enabled) {
-  document.querySelectorAll('input[name="numberBet"], input[name="colorBet"], input[name="sideBet"]').forEach(i => {
+  const controls = document.querySelectorAll(
+    'input[name="numberBet"], input[name="colorBet"], input[name="sideBet"]'
+  );
+  
+  controls.forEach(i => {
     i.disabled = !enabled;
+    if (!enabled) {
+      i.parentElement.classList.add('disabled');
+      i.parentElement.querySelector('span').style.outline = 'none';
+    } else {
+      i.parentElement.classList.remove('disabled');
+      i.parentElement.querySelector('span').style.outline = '';
+    }
   });
+  
   stakeIn.disabled = !enabled;
   speedSel.disabled = !enabled;
   spinBtn.disabled = !enabled;
+  
+  if (!enabled) {
+    spinBtn.classList.add('disabled');
+  } else {
+    spinBtn.classList.remove('disabled');
+  }
 }
 
 // Initialize board with numbers 0-36 in order
@@ -34,7 +53,6 @@ function initBoard() {
   board.innerHTML = '';
   remaining = wheel.map(w => ({ ...w, removed: false }));
   
-  // Create slots in order (0-36)
   for (let num = 0; num <= 36; num++) {
     const slot = document.createElement('div');
     slot.className = `slot ${wheel[num].color}`;
@@ -53,7 +71,6 @@ function updateOdds() {
   const alive = remaining.filter(r => !r.removed);
   let wins = 0, total = alive.length;
 
-  // Check bet type
   const numberBet = document.querySelector('input[name="numberBet"]:checked');
   const colorBet = document.querySelector('input[name="colorBet"]:checked');
   const sideBet = document.querySelector('input[name="sideBet"]:checked');
@@ -91,17 +108,14 @@ function settle(winnerIdx, eliminated = false, betContext) {
   const winner = remaining[winnerIdx];
   let payout = 0, won = false;
 
-  // Number bet
   if (betContext.type === 'number') {
     won = !eliminated; 
     payout = won ? 36 * stake : 0;
   }
-  // Color bet
   else if (betContext.type === 'color') {
     won = betContext.choice === winner.color;
     payout = won ? (winner.color === 'green' ? 36 : 2) * stake : 0;
   }
-  // Side bet
   else {
     const map = { odd:2, even:2, low:2, high:2, doz1:3, doz2:3, doz3:3 };
     const n = winner.num;
@@ -122,7 +136,6 @@ function settle(winnerIdx, eliminated = false, betContext) {
     payout = won ? map[s] * stake : 0;
   }
 
-  // Update balance and UI
   balance += payout - stake;
   balanceEl.textContent = balance;
   resTitle.textContent = won ? '🎉 You Win!' : '💔 You Lose';
@@ -141,6 +154,68 @@ function deselectOtherBets(currentGroup) {
   });
 }
 
+// Apply bright colors to numbers
+function applyBrightColors(numbers) {
+  numbers.forEach(n => {
+    const slot = document.querySelector(`.slot[data-idx="${n}"]`);
+    if (slot) {
+      if (slot.classList.contains('red')) {
+        slot.classList.add('bright-red');
+      } else if (slot.classList.contains('black')) {
+        slot.classList.add('bright-black');
+      } else if (slot.classList.contains('green')) {
+        slot.classList.add('bright-green');
+      }
+    }
+  });
+}
+
+// Handle bet hover
+function handleBetHover(event, type, value) {
+  clearHover();
+  event.currentTarget.classList.add('hover');
+  
+  if (type === 'color') {
+    let numbers = [];
+    if (value === 'red') {
+      numbers = Array.from(reds);
+    } else if (value === 'black') {
+      numbers = Array.from({length: 36}, (_, i) => i+1).filter(n => !reds.has(n));
+    } else if (value === 'green') {
+      numbers = [0];
+    }
+    applyBrightColors(numbers);
+  } 
+  else if (type === 'side') {
+    let numbers = [];
+    switch(value) {
+      case 'doz1': numbers = Array.from({length: 12}, (_, i) => i+1); break;
+      case 'doz2': numbers = Array.from({length: 12}, (_, i) => i+13); break;
+      case 'doz3': numbers = Array.from({length: 12}, (_, i) => i+25); break;
+      case 'low': numbers = Array.from({length: 18}, (_, i) => i+1); break;
+      case 'high': numbers = Array.from({length: 18}, (_, i) => i+19); break;
+      case 'even': 
+        numbers = Array.from({length: 36}, (_, i) => i+1).filter(n => n % 2 === 0);
+        break;
+      case 'odd':
+        numbers = Array.from({length: 36}, (_, i) => i+1).filter(n => n % 2 === 1);
+        break;
+    }
+    applyBrightColors(numbers);
+  }
+}
+
+// Clear hover effects
+function clearHover() {
+  document.querySelectorAll('.color-bet, .side-bet').forEach(el => {
+    el.classList.remove('hover');
+  });
+  
+  document.querySelectorAll('.slot').forEach(slot => {
+    slot.classList.remove('bright-red', 'bright-black', 'bright-green');
+  });
+}
+
 // Spin the wheel
 function spin() {
   const stake = +stakeIn.value;
@@ -148,7 +223,6 @@ function spin() {
     return alert('Invalid or insufficient stake!');
   }
 
-  // Check if any bet is placed
   const numberBet = document.querySelector('input[name="numberBet"]:checked');
   const colorBet = document.querySelector('input[name="colorBet"]:checked');
   const sideBet = document.querySelector('input[name="sideBet"]:checked');
@@ -157,10 +231,9 @@ function spin() {
     return alert('Please place a bet!');
   }
 
-  // Lock controls
   setControlsEnabled(false);
+  clearHover();
 
-  // Capture bet context
   let betContext = {};
   
   if (numberBet) {
@@ -191,7 +264,6 @@ function spin() {
   let step = 0;
   let { wins, total } = updateOdds();
 
-  // Immediate elimination if no possible wins
   if (betContext.type === 'number' && wins === 0) {
     const idx = order[0];
     document.querySelector(`.slot[data-idx="${idx}"]`).classList.add('eliminated');
@@ -199,7 +271,6 @@ function spin() {
     return settle(idx, true, betContext);
   }
 
-  // Elimination animation
   const timer = setInterval(() => {
     const idx = order[step];
     remaining[idx].removed = true;
@@ -209,7 +280,6 @@ function spin() {
 
     ({ wins, total } = updateOdds());
 
-    // Check for end conditions
     if (betContext.type === 'number' && wins === 0) {
       clearInterval(timer);
       return settle(idx, true, betContext);
@@ -229,14 +299,18 @@ spinBtn.addEventListener('click', spin);
 againBtn.addEventListener('click', () => {
   modal.classList.remove('active');
   initBoard();
+  clearHover();
+  document.querySelectorAll('.bets-section span').forEach(span => {
+    span.style.outline = '';
+  });
 });
 
-// Deselect other bet groups when a bet is selected
 document.querySelectorAll('input[name="numberBet"]').forEach(input => {
   input.addEventListener('change', () => {
     if (input.checked) {
       deselectOtherBets('numberBet');
       updateOdds();
+      applyBrightColors([parseInt(input.value)]);
     }
   });
 });
@@ -246,6 +320,15 @@ document.querySelectorAll('input[name="colorBet"]').forEach(input => {
     if (input.checked) {
       deselectOtherBets('colorBet');
       updateOdds();
+      let numbers = [];
+      if (input.value === 'red') {
+        numbers = Array.from(reds);
+      } else if (input.value === 'black') {
+        numbers = Array.from({length: 36}, (_, i) => i+1).filter(n => !reds.has(n));
+      } else if (input.value === 'green') {
+        numbers = [0];
+      }
+      applyBrightColors(numbers);
     }
   });
 });
@@ -255,8 +338,35 @@ document.querySelectorAll('input[name="sideBet"]').forEach(input => {
     if (input.checked) {
       deselectOtherBets('sideBet');
       updateOdds();
+      let numbers = [];
+      switch(input.value) {
+        case 'doz1': numbers = Array.from({length: 12}, (_, i) => i+1); break;
+        case 'doz2': numbers = Array.from({length: 12}, (_, i) => i+13); break;
+        case 'doz3': numbers = Array.from({length: 12}, (_, i) => i+25); break;
+        case 'low': numbers = Array.from({length: 18}, (_, i) => i+1); break;
+        case 'high': numbers = Array.from({length: 18}, (_, i) => i+19); break;
+        case 'even': 
+          numbers = Array.from({length: 36}, (_, i) => i+1).filter(n => n % 2 === 0);
+          break;
+        case 'odd':
+          numbers = Array.from({length: 36}, (_, i) => i+1).filter(n => n % 2 === 1);
+          break;
+      }
+      applyBrightColors(numbers);
     }
   });
+});
+
+document.querySelectorAll('.color-bet').forEach(bet => {
+  const input = bet.querySelector('input');
+  bet.addEventListener('mouseenter', (e) => handleBetHover(e, 'color', input.value));
+  bet.addEventListener('mouseleave', clearHover);
+});
+
+document.querySelectorAll('.side-bet').forEach(bet => {
+  const input = bet.querySelector('input');
+  bet.addEventListener('mouseenter', (e) => handleBetHover(e, 'side', input.value));
+  bet.addEventListener('mouseleave', clearHover);
 });
 
 stakeIn.addEventListener('change', updateOdds);

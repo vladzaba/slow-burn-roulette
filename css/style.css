@@ -140,6 +140,8 @@ body {
   transition: all 0.3s;
   font-size: 0.9rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 1;
 }
 .slot.red {
   background: rgb(233, 62, 78);
@@ -198,18 +200,21 @@ body {
   background: rgb(38, 54, 66);
   transition: all 0.2s;
   font-weight: 500;
+  outline: 2px solid rgb(55, 68, 81);
 }
 .bets-section input:checked + span {
   background: rgb(53, 121, 246);
   color: white;
   font-weight: 700;
   box-shadow: 0 0 10px rgba(53, 121, 246, 0.5);
+  outline: none;
 }
 
 /* Color bet specific styling */
 .color-bet span {
   color: white;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  outline: 2px solid rgb(55, 68, 81);
 }
 .color-bet.red span {
   background: rgb(233, 62, 78);
@@ -219,6 +224,11 @@ body {
 }
 .color-bet.green span {
   background: rgb(91, 156, 75);
+}
+
+/* Side bet styling */
+.side-bet span {
+  outline: 2px solid rgb(55, 68, 81);
 }
 
 /* NUMBER GRID - SQUARE STYLE */
@@ -335,6 +345,79 @@ body {
   background: rgb(40, 100, 220);
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0,0,0,0.4);
+}
+
+/* INACTIVE STATE STYLES */
+.spin-btn.disabled {
+  background: rgb(43, 93, 174) !important; /* Inactive Blue */
+}
+
+.color-bet.red.disabled span {
+  background: rgb(187, 39, 54) !important; /* Inactive Red */
+}
+
+.color-bet.black.disabled span {
+  background: rgb(39, 54, 65) !important; /* Inactive Black */
+}
+
+.color-bet.green.disabled span {
+  background: rgb(72, 125, 61) !important; /* Inactive Green */
+}
+
+.side-bet.disabled span {
+  background: rgb(38, 54, 66) !important; /* Original background */
+  opacity: 0.7;
+  outline: none !important;
+}
+
+.number-grid input:disabled + span {
+  opacity: 0.7;
+}
+
+.number-grid input:disabled + span.red {
+  background: rgb(187, 39, 54) !important; /* Inactive Red */
+}
+
+.number-grid input:disabled + span.black {
+  background: rgb(39, 54, 65) !important; /* Inactive Black */
+}
+
+.number-grid input:disabled + span.green {
+  background: rgb(72, 125, 61) !important; /* Inactive Green */
+}
+
+/* BRIGHT COLOR EFFECTS */
+.slot.bright-red {
+  background: rgb(236, 119, 136) !important;
+}
+
+.slot.bright-black {
+  background: rgb(83, 109, 130) !important;
+}
+
+.slot.bright-green {
+  background: rgb(127, 192, 113) !important;
+}
+
+/* HOVER EFFECTS FOR BUTTONS ONLY */
+.color-bet:hover:not(.disabled) span {
+  /* Only color change, no elevation */
+}
+
+.color-bet.red.hover:not(.disabled) span {
+  background: rgb(236, 119, 136) !important;
+}
+
+.color-bet.black.hover:not(.disabled) span {
+  background: rgb(83, 109, 130) !important;
+}
+
+.color-bet.green.hover:not(.disabled) span {
+  background: rgb(127, 192, 113) !important;
+}
+
+.side-bet.hover:not(.disabled) span {
+  background: rgb(60, 80, 100) !important;
 }
 
 /* RESPONSIVE DESIGN */
